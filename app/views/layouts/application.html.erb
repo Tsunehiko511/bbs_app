@@ -21,7 +21,7 @@ $(document).ready(function() {
         $(document.getElementsByTagName('span1')[n]).html($(document.getElementsByTagName('span1')[n]).html().replace(exp,"<a href='$1' target='_blank'>$1</a>"));
       }else{
   var output = tagname;
-
+    output = output.replace(/\{(.*)\} /g,'\\{$1\\} ');
     output = output.replace(/\r\n/g,'\n');
     output = output.replace(/\r/g,'\n');
     output = output.replace(/\n/g,'\\\\');//改行
@@ -31,22 +31,22 @@ $(document).ready(function() {
   var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
   for (var i=0,I=fullWidth.length; i<I; i++)
     output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
-    output = divide(output);
+    output = divide(output);//分数にする？以下で定義
   function divide(original){
     var slash = [], par = 0;
     for (var i=0,I=original.length; i<I; i++){
-      var character = original.charAt(i);
-      switch (character){
-        case '(': par++; break;
-        case ')': par--; break;
-        case '/': slash.push([par,i]); break;
+      var character = original.charAt(i);//i番目の配列を抜き出す
+      switch (character){//以下でslash配列に/ごとの()の数を記憶させる
+        case '(': par++; break;//character=='('ならpar=par+1
+        case ')': par--; break;//character==')'ならpar=par+1
+        case '/': slash.push([par,i]); break;//slash配列に[par,i]を記憶させてbreak
       }
     }
-    var S = slash.length;
-    if (S>0){
-      for (var i=1,min=slash[0][0]; i<S; i++) min = Math.min(slash[i][0],min);
-      for (var i=0,minSlash=[-1]; i<S; i++) if (slash[i][0]==min) minSlash.push(slash[i][1]);
-      minSlash.push(I);
+    var S = slash.length;//分数の分割の数
+    if (S>0){//分数があれば
+      for (var i=1,min=slash[0][0]; i<S; i++) min = Math.min(slash[i][0],min);//配列slashi番目のparの最小をminとする
+      for (var i=0,minSlash=[-1]; i<S; i++) if (slash[i][0]==min) minSlash.push(slash[i][1]);//もしparが最小なら　その値をminSlashに入れる
+      minSlash.push(I);//
       var parts = [];
       for (var i=0,M=minSlash.length; i<M-1; i++){
         parts[i] = original.slice(minSlash[i]+1,minSlash[i+1]);
@@ -81,10 +81,24 @@ $(document).ready(function() {
     else var parts = original;
     return parts;
   }
-
-
   output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
-  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','実数R':'\\mathbb{R} '};
+  output = output.replace(/積分\((.*?)から(.*?)\)/g,'\\int_{$1}^{$2} ');
+  output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
+  output = output.replace(/(.*?)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
+  output = output.replace(/lim\((.*?)が(.*?)へ\)/g,'\\lim_{$1 \\to $2} ');
+  output = output.replace(/連立\((.*?),(.*?)\)/g,'\\left\\{\\begin{array}{l}$1\\\\$2 \\end{array}\\right. ');//コロンの数だけ増やしたい
+  output = output.replace(/>=/g,'\\ge ');
+  output = output.replace(/=</g,'\\le ');
+  output = output.replace(/行列\(\((.*?),(.*?),(.*?)\),\((.*?),(.*?),(.*?)\),\((.*?),(.*?),(.*?)\)\)/g,'\\left(\\begin{array}{ccc}$1 & $2 & $3 \\\\$4 & $5 & $6 \\\\$7 & $8 & $9\\end{array}\\right) ');
+  output = output.replace(/行列\(\((.*?),(.*?)\),\((.*?),(.*?)\)\)/g,'\\left(\\begin{array}{cc}$1 & $2 \\\\$3 & $4 \\end{array}\\right) ');
+  output = output.replace(/行列\(\(?(.*?)\)?,\(?(.*?)\)?\)/g,'\\left(\\begin{array}{c}$1 \\\\$2 \\end{array}\\right) ');
+  output = output.replace(/ベクトル\((.*?)\)/g,'\\overrightarrow{$1} ');
+  output = output.replace(/シグマ\((.*)から(.*)\)/g,'\\sum_{$1}^{$2} ');
+
+
+
+
+  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','無限大':'\\infty ',};
   for (var myJpn in jpnCommand)
     output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
     
