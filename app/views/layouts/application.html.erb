@@ -31,7 +31,7 @@ $(document).ready(function() {
   var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
   for (var i=0,I=fullWidth.length; i<I; i++)
     output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
-    output = divide(output);//分数にする？以下で定義
+
   function divide(original){
     var slash = [], par = 0;
     for (var i=0,I=original.length; i<I; i++){
@@ -81,6 +81,7 @@ $(document).ready(function() {
     else var parts = original;
     return parts;
   }
+  output = divide(output);//分数にする？以下で定義
   output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
   output = output.replace(/積分\((.*?)から(.*?)\)/g,'\\int_{$1}^{$2} ');
   output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
@@ -128,7 +129,7 @@ function Real(){
   var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
   for (var i=0,I=fullWidth.length; i<I; i++)
     output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
-    output = divide(output);//分数にする？以下で定義
+    
   function divide(original){
     var slash = [], par = 0;
     for (var i=0,I=original.length; i<I; i++){
@@ -178,6 +179,7 @@ function Real(){
     else var parts = original;
     return parts;
   }
+  output = divide(output);//分数にする？以下で定義
   output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
   output = output.replace(/積分\((.*?)から(.*?)\)/g,'\\int_{$1}^{$2} ');
   output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
