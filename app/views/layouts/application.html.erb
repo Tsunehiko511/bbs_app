@@ -21,7 +21,7 @@ $(document).ready(function() {
         $(document.getElementsByTagName('span1')[n]).html($(document.getElementsByTagName('span1')[n]).html().replace(exp,"<a href='$1' target='_blank'>$1</a>"));
       }else{
   var output = tagname;
-    output = output.replace(/\{(.*)\} /g,'\\{$1\\} ');
+    //output = output.replace(/\{(.*)\} /g,'\\{$1\\} ');
     output = output.replace(/\r\n/g,'\n');
     output = output.replace(/\r/g,'\n');
     output = output.replace(/\n/g,'\\\\');//改行
@@ -31,7 +31,7 @@ $(document).ready(function() {
   var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
   for (var i=0,I=fullWidth.length; i<I; i++)
     output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
-
+    
   function divide(original){
     var slash = [], par = 0;
     for (var i=0,I=original.length; i<I; i++){
@@ -110,11 +110,7 @@ $(document).ready(function() {
   output = output.replace(/任意の?\((.*?)\)/g,'{}^{\\forall}{$1} ');
   output = output.replace(/存在す?る?\((.*?)\)/g,'{}^{\\exists}{$1} ');
 
-
-
-
-
-  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','無限大':'\\infty ',};
+  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','無限大':'\\infty ',};
   for (var myJpn in jpnCommand)
     output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
     
@@ -123,7 +119,7 @@ $(document).ready(function() {
 //    output = output.replace(/\(^ -~｡-ﾟ\)/g,'\$$1\$\{\}');
 
 
- document.getElementsByTagName('span1')[n].innerHTML = '$ \\displaystyle{'+output+'}$';
+ document.getElementsByTagName('span1')[n].innerHTML = '$ \\displaystyle{ '+output+'}$';
   MathJax.Hub.Typeset();
       };
     };
@@ -132,7 +128,7 @@ $(document).ready(function() {
 function Real(){
   var output = document.getElementById('response_content').value;
   //output = output.replace(/\$/g,'');  //ドルマーク削除
-    output = output.replace(/\{(.*)\} /g,'\\{$1\\} ');
+    //output = output.replace(/\{(.*)\} /g,'\\{$1\\} ');
     output = output.replace(/\r\n/g,'\n');
     output = output.replace(/\r/g,'\n');
     output = output.replace(/\n/g,'\\\\');//改行
