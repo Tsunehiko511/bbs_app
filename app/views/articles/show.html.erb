@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @article.title %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @article.name %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @article.content %>
+</p>
+
+<%= link_to 'Edit', edit_article_path(@article) %> |
+<%= link_to 'Back', articles_path %>
+
+<% @article.responses.each do |response| %>
+      <p>
+        <%= response.name %>
+      </p>
+      <p>
+        <%= response.content %>
+        <%= link_to 'Destroy', response_path(response), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </p>
+    <% end %>
+
+<%= form_for(@response) do |f| %>
+  <% if @response.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@response.errors.count, "error") %> prohibited this response from being saved:</h2>
+
+      <ul>
+      <% @response.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_area :content ,:size=>"60x10"%>
+  </div>
+ 
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

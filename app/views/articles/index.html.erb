@@ -1,0 +1,62 @@
+
+<h1>掲示板</h1>
+<hr class="style-one">
+    <% @articles.each do |article| %>
+      <h2>
+        <%= article.id %>
+        <%= article.title %>
+      </h2>
+      <p>
+        <%= article.name %>
+        <%= article.updated_at.strftime "%Y/%M/%d %H:%M:%S" %>
+      </p>
+      <span1>
+        <%= article.content %>
+      </span1>
+      <p>
+        <%= link_to '削除', article, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </p><br>
+<hr class="style-one">
+<% article.responses.each do |response| %>
+      <p>
+        <%= response.name %>
+        <%= response.updated_at.strftime "%Y/%M/%d %H:%M:%S" %>
+      </p>
+      <span1>
+        <%= response.content %>
+      </span1><br>
+      <hr class="style-one">
+    <% end %>
+    <div id='realtime'>プレビュ〜です</div>
+<%= form_for(@response) do |f| %>
+  <% if @response.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@response.errors.count, "error") %> prohibited this response from being saved:</h2>
+
+      <ul>
+      <% @response.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name ,placeholder: "名前"%>
+    <span3 class="actions">
+    <%= f.submit :value =>"送信" %>
+  </span3>
+  </div>
+  <div class="field">
+    <%= f.text_area :content ,:size=>"60x10",:oninput=>'Real()',placeholder: "内容..."%>
+  </div>
+  <div class="field" >
+    <%= f.hidden_field :article_id, :value => article.id %>
+  </div>
+<% end %>
+<% end %>
+<br>
+<br>
+<%= link_to '新規作成', new_article_path %>
+
+

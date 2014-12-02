@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>アリスとテレス</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+<script>
+document.addEventListener('DOMContentLoaded',function(){ document.getElementById('response_content').focus();},false);
+
+$(document).ready(function() {
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    for(var n=0,N=document.getElementsByTagName('span1').length; n<N; n++) {
+    var tagname =document.getElementsByTagName('span1')[n].innerHTML;
+
+      if((tagname).match(exp)){
+        $(document.getElementsByTagName('span1')[n]).html($(document.getElementsByTagName('span1')[n]).html().replace(exp,"<a href='$1' target='_blank'>$1</a>"));
+      }else{
+  var output = tagname;
+
+    output = output.replace(/\r\n/g,'\n');
+    output = output.replace(/\r/g,'\n');
+    output = output.replace(/\n/g,'\\\\');//改行
+    output = output.replace(/\s/g,'\\ ');//スペース登録
+    
+  var fullWidth = 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９、。＾＋－（）｛｝';  //全角を
+  var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
+  for (var i=0,I=fullWidth.length; i<I; i++)
+    output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
+  /*var parts = output.split('\/');//outputの割り算/のあるところで分割
+  //ここから分子を決める
+  for (var i=0,I=parts.length-1; i<I; i++){//割り算のある箇所だけ繰り返す
+    for (var j=parts[i].length-1,par=0; j>=0; j--){//割り算で区切られた中の文字数だけ繰り返す
+      if (parts[i].charAt(j)==')') par++;//i番目の区切りの中のj番目に)があればpar=par+1
+      if (parts[i].charAt(j)=='(') par--;//i番目の区切りの中のj番目に(があればpar=par-1
+      var flag = parts[i].charAt(j).match(/[^A-Za-z0-9\*×\(\)]/);//
+      //var flag = (parts[i].charAt(j)=='+' || parts[i].charAt(j)=='-');iのj番目が+ or -ならtrue であればその値を入れる
+      if (par==0 && (flag || j==0)){//かっこ"("と")"の数が一致してflagが"+"or"-"または or for文が最後なら
+        if (!flag && j==0) j--;//(もしflagが存在せず最後のでないなら、jを一つ下げる(一つ左に移る)
+        parts[i] = (parts[i].charAt(j+1)==('(') && parts[i].charAt(parts[i].length-1)==(')') && parts[i].slice(j+1).indexOf(')(')<0) ? parts[i].slice(0,j+1)+parts[i].slice(j+1).replace(/\((.*)\)/,'\\frac {$1}') : parts[i].slice(0,j+1)+'\\frac {'+parts[i].slice(j+1)+'}';//i番目のj+1番目に(があり、j-1番目に)があり、j+1番以降の)(がみつからない
+        //なら　i番目の0からjまで　と　frac{それ以降の　()の中が　0個以上の改行以外の文字　}の配列を入れる　
+        //そうでないならi番目の0からjまで　と　frac{それ以降}を配列に入れつ　
+      break;
+      }
+    }//ここから分母を決める
+    for (var j=0,J=parts[i+1].length,par=0; j<J; j++){
+      if (parts[i+1].charAt(j)=='(') par++;
+      if (parts[i+1].charAt(j)==')') par--;
+      var flag = parts[i+1].charAt(j).match(/[^A-Za-z0-9\*×\(\)]/);//
+      if (par==0 && (flag || j==J-1)){
+        if (!flag && j==J-1) j++;
+      parts[i+1] = (parts[i+1].charAt(0)==('(') && parts[i+1].charAt(j-1)==(')') && parts[i+1].slice(0,j).indexOf(')(')<0) ? parts[i+1].slice(0,j).replace(/\((.*)\)/,'{$1}')+parts[i+1].slice(j) : '{'+parts[i+1].slice(0,j)+'}'+parts[i+1].slice(j);
+      break;
+      }
+    }
+  }
+  output = parts.join('');*/
+    output = divide(output);
+  function divide(original){
+    var slash = [], par = 0;
+    for (var i=0,I=original.length; i<I; i++){
+      var character = original.charAt(i);
+      switch (character){
+        case '(': par++; break;
+        case ')': par--; break;
+        case '/': slash.push([par,i]); break;
+      }
+    }
+    var S = slash.length;
+    if (S>0){
+      for (var i=1,min=slash[0][0]; i<S; i++) min = Math.min(slash[i][0],min);
+      for (var i=0,minSlash=[-1]; i<S; i++) if (slash[i][0]==min) minSlash.push(slash[i][1]);
+      minSlash.push(I);
+      var parts = [];
+      for (var i=0,M=minSlash.length; i<M-1; i++){
+        parts[i] = original.slice(minSlash[i]+1,minSlash[i+1]);
+        if (parts[i].indexOf('/')>=0) parts[i] = divide(parts[i]);
+      }
+      for (var i=0,I=parts.length-1; i<I; i++){
+        for (var j=parts[i].length-1,par=0; j>=0; j--){
+          var character = parts[i].charAt(j);
+          if (character==')') par++;
+          if (character=='(') par--;
+          var flag = character.match(/[^A-Za-z0-9\*×\(\)]/);
+          if (par<=0 && (flag || j==0)){
+            if (!flag && j==0) j--;
+            parts[i] = (parts[i].charAt(j+1)==('(') && parts[i].charAt(parts[i].length-1)==(')') && parts[i].slice(j+1).indexOf(')(')<0) ? parts[i].slice(0,j+1)+parts[i].slice(j+1).replace(/\((.*)\)/,'\\frac {$1}') : parts[i].slice(0,j+1)+'\\frac {'+parts[i].slice(j+1)+'}';
+            break;
+          }
+        }
+        for (var j=0,J=parts[i+1].length,par=0; j<J; j++){
+          var character = parts[i+1].charAt(j);
+          if (character=='(') par++;
+          if (character==')') par--;
+          var flag = character.match(/[^A-Za-z0-9\*×\(\)]/);
+          if (par<=0 && (flag || j==J-1)){
+            if (!flag && j==J-1) j++;
+            parts[i+1] = (parts[i+1].charAt(0)==('(') && parts[i+1].charAt(j-1)==(')') && parts[i+1].slice(0,j).indexOf(')(')<0) ? parts[i+1].slice(0,j).replace(/\((.*)\)/,'{$1}')+parts[i+1].slice(j) : '{'+parts[i+1].slice(0,j)+'}'+parts[i+1].slice(j);
+            break;
+          }
+        }
+      }
+      parts = parts.join('');
+    }
+    else var parts = original;
+    return parts;
+  }
+
+
+  output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
+  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','実数R':'\\mathbb{R} '};
+  for (var myJpn in jpnCommand)
+    output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
+    
+
+    //output = output.replace(/([^ -~｡-ﾟ])/g,'$$$1$$\{\} ');//日本語フォント
+//    output = output.replace(/\(^ -~｡-ﾟ\)/g,'\$$1\$\{\}');
+
+
+ document.getElementsByTagName('span1')[n].innerHTML = '$ \\displaystyle{'+output+'}$';
+  MathJax.Hub.Typeset();
+      };
+    };
+});
+
+function Real(){
+  var output = document.getElementById('response_content').value;
+  //output = output.replace(/\$/g,'');  //ドルマーク削除
+    output = output.replace(/\r\n/g,'\n');
+    output = output.replace(/\r/g,'\n');
+    output = output.replace(/\n/g,'\\\\');//改行
+    output = output.replace(/\s/g,'\\ ');//スペース登録
+    
+  var fullWidth = 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９、。＾＋－（）｛｝';  //全角を
+  var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}';   //半角
+  for (var i=0,I=fullWidth.length; i<I; i++)
+    output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));//に変換
+  /*
+  var parts = output.split('\/');//outputの割り算/のあるところで分割
+  //ここから分子を決める
+  for (var i=0,I=parts.length-1; i<I; i++){//割り算のある箇所だけ繰り返す
+    for (var j=parts[i].length-1,par=0; j>=0; j--){//割り算で区切られた中の文字数だけ繰り返す
+      if (parts[i].charAt(j)==')') par++;//i番目の区切りの中のj番目に)があればpar=par+1
+      if (parts[i].charAt(j)=='(') par--;//i番目の区切りの中のj番目に(があればpar=par-1
+      var flag = parts[i].charAt(j).match(/[^A-Za-z0-9\*×\(\)]/);//
+      //var flag = (parts[i].charAt(j)=='+' || parts[i].charAt(j)=='-');iのj番目が+ or -ならtrue であればその値を入れる
+      if (par==0 && (flag || j==0)){//かっこ"("と")"の数が一致してflagが"+"or"-"または or for文が最後なら
+        if (!flag && j==0) j--;//(もしflagが存在せず最後のでないなら、jを一つ下げる(一つ左に移る)
+        parts[i] = (parts[i].charAt(j+1)==('(') && parts[i].charAt(parts[i].length-1)==(')') && parts[i].slice(j+1).indexOf(')(')<0) ? parts[i].slice(0,j+1)+parts[i].slice(j+1).replace(/\((.*)\)/,'\\frac {$1}') : parts[i].slice(0,j+1)+'\\frac {'+parts[i].slice(j+1)+'}';//i番目のj+1番目に(があり、j-1番目に)があり、j+1番以降の)(がみつからない
+        //なら　i番目の0からjまで　と　frac{それ以降の　()の中が　0個以上の改行以外の文字　}の配列を入れる　
+        //そうでないならi番目の0からjまで　と　frac{それ以降}を配列に入れつ　
+      break;
+      }
+    }//ここから分母を決める
+    for (var j=0,J=parts[i+1].length,par=0; j<J; j++){
+      if (parts[i+1].charAt(j)=='(') par++;
+      if (parts[i+1].charAt(j)==')') par--;
+      var flag = parts[i+1].charAt(j).match(/[^A-Za-z0-9\*×\(\)]/);//
+      if (par==0 && (flag || j==J-1)){
+        if (!flag && j==J-1) j++;
+      parts[i+1] = (parts[i+1].charAt(0)==('(') && parts[i+1].charAt(j-1)==(')') && parts[i+1].slice(0,j).indexOf(')(')<0) ? parts[i+1].slice(0,j).replace(/\((.*)\)/,'{$1}')+parts[i+1].slice(j) : '{'+parts[i+1].slice(0,j)+'}'+parts[i+1].slice(j);
+      break;
+      }
+    }
+  }
+  output = parts.join('');*/
+
+    output = divide(output);
+  function divide(original){
+    var slash = [], par = 0;
+    for (var i=0,I=original.length; i<I; i++){
+      var character = original.charAt(i);
+      switch (character){
+        case '(': par++; break;
+        case ')': par--; break;
+        case '/': slash.push([par,i]); break;
+      }
+    }
+    var S = slash.length;
+    if (S>0){
+      for (var i=1,min=slash[0][0]; i<S; i++) min = Math.min(slash[i][0],min);
+      for (var i=0,minSlash=[-1]; i<S; i++) if (slash[i][0]==min) minSlash.push(slash[i][1]);
+      minSlash.push(I);
+      var parts = [];
+      for (var i=0,M=minSlash.length; i<M-1; i++){
+        parts[i] = original.slice(minSlash[i]+1,minSlash[i+1]);
+        if (parts[i].indexOf('/')>=0) parts[i] = divide(parts[i]);
+      }
+      for (var i=0,I=parts.length-1; i<I; i++){
+        for (var j=parts[i].length-1,par=0; j>=0; j--){
+          var character = parts[i].charAt(j);
+          if (character==')') par++;
+          if (character=='(') par--;
+          var flag = character.match(/[^A-Za-z0-9\*×\(\)]/);
+          if (par<=0 && (flag || j==0)){
+            if (!flag && j==0) j--;
+            parts[i] = (parts[i].charAt(j+1)==('(') && parts[i].charAt(parts[i].length-1)==(')') && parts[i].slice(j+1).indexOf(')(')<0) ? parts[i].slice(0,j+1)+parts[i].slice(j+1).replace(/\((.*)\)/,'\\frac {$1}') : parts[i].slice(0,j+1)+'\\frac {'+parts[i].slice(j+1)+'}';
+            break;
+          }
+        }
+        for (var j=0,J=parts[i+1].length,par=0; j<J; j++){
+          var character = parts[i+1].charAt(j);
+          if (character=='(') par++;
+          if (character==')') par--;
+          var flag = character.match(/[^A-Za-z0-9\*×\(\)]/);
+          if (par<=0 && (flag || j==J-1)){
+            if (!flag && j==J-1) j++;
+            parts[i+1] = (parts[i+1].charAt(0)==('(') && parts[i+1].charAt(j-1)==(')') && parts[i+1].slice(0,j).indexOf(')(')<0) ? parts[i+1].slice(0,j).replace(/\((.*)\)/,'{$1}')+parts[i+1].slice(j) : '{'+parts[i+1].slice(0,j)+'}'+parts[i+1].slice(j);
+            break;
+          }
+        }
+      }
+      parts = parts.join('');
+    }
+    else var parts = original;
+    return parts;
+  }
+  output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
+  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','実数R':'\\mathbb{R} '};
+  for (var myJpn in jpnCommand)
+    output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
+    
+
+    //output = output.replace(/([^ -~｡-ﾟ])/g,'$$$1$$\{\} ');//日本語フォント
+//    output = output.replace(/\(^ -~｡-ﾟ\)/g,'\$$1\$\{\}');
+
+
+
+  document.getElementById('realtime').innerHTML ='$ '+output+'$';
+
+  MathJax.Hub.Typeset();
+}
+</script>
+
+
+
+
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>
