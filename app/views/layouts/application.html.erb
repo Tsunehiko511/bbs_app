@@ -84,7 +84,7 @@ $(document).ready(function() {
   output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
   output = output.replace(/積分\((.*?)から(.*?)\)/g,'\\int_{$1}^{$2} ');
   output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
-  output = output.replace(/(.*?)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
+  output = output.replace(/(.)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
   output = output.replace(/lim\((.*?)が(.*?)へ\)/g,'\\lim_{$1 \\to $2} ');
   output = output.replace(/連立\((.*?),(.*?)\)/g,'\\left\\{\\begin{array}{l}$1\\\\$2 \\end{array}\\right. ');//コロンの数だけ増やしたい
   output = output.replace(/>=/g,'\\ge ');
@@ -93,7 +93,9 @@ $(document).ready(function() {
   output = output.replace(/行列\(\((.*?),(.*?)\),\((.*?),(.*?)\)\)/g,'\\left(\\begin{array}{cc}$1 & $2 \\\\$3 & $4 \\end{array}\\right) ');
   output = output.replace(/行列\(\(?(.*?)\)?,\(?(.*?)\)?\)/g,'\\left(\\begin{array}{c}$1 \\\\$2 \\end{array}\\right) ');
   output = output.replace(/ベクトル\((.*?)\)/g,'\\overrightarrow{$1} ');
-  output = output.replace(/シグマ\((.*)から(.*)\)/g,'\\sum_{$1}^{$2} ');
+  output = output.replace(/シグマ\((.*?)から(.*?)\)/g,'\\sum_{$1}^{$2} ');
+  output = output.replace(/任意の?\((.*?)\)/g,'{}^{\\forall}{$1} ');
+  output = output.replace(/存在す?る?\((.*?)\)/g,'{}^{\\exists}{$1} ');
 
 
 
@@ -179,7 +181,7 @@ function Real(){
   output = output.replace(/ルート\((.*?)\)/g,'ルート{\\mathstrut $1}');
   output = output.replace(/積分\((.*?)から(.*?)\)/g,'\\int_{$1}^{$2} ');
   output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
-  output = output.replace(/(.*?)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
+  output = output.replace(/(.)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
   output = output.replace(/lim\((.*?)が(.*?)へ\)/g,'\\lim_{$1 \\to $2} ');
   output = output.replace(/連立\((.*?),(.*?)\)/g,'\\left\\{\\begin{array}{l}$1\\\\$2 \\end{array}\\right. ');//コロンの数だけ増やしたい
   output = output.replace(/>=/g,'\\ge ');
@@ -188,12 +190,15 @@ function Real(){
   output = output.replace(/行列\(\((.*?),(.*?)\),\((.*?),(.*?)\)\)/g,'\\left(\\begin{array}{cc}$1 & $2 \\\\$3 & $4 \\end{array}\\right) ');
   output = output.replace(/行列\(\(?(.*?)\)?,\(?(.*?)\)?\)/g,'\\left(\\begin{array}{c}$1 \\\\$2 \\end{array}\\right) ');
   output = output.replace(/ベクトル\((.*?)\)/g,'\\overrightarrow{$1} ');
-  output = output.replace(/シグマ\((.*)から(.*)\)/g,'\\sum_{$1}^{$2} ');
+  output = output.replace(/シグマ\((.*?)から(.*?)\)/g,'\\sum_{$1}^{$2} ');
+  output = output.replace(/任意の?\((.*?)\)/g,'{}^{\\forall}{$1} ');
+  output = output.replace(/存在す?る?\((.*?)\)/g,'{}^{\\exists}{$1} ');
 
 
 
 
-  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','任意の':' {}^\\forall ','存在する':'{}^\\exists ','無限大':'\\infty ',};
+
+  var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','ルート':'\\sqrt ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','無限大':'\\infty ',};
   for (var myJpn in jpnCommand)
     output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
     
