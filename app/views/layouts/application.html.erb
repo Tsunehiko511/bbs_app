@@ -13,19 +13,21 @@
 
   function MathChenge(output){
       //output = output.replace(/\$/g,'');  //ドルマーク削除
-      output = output.replace(/\{ /g,'\\left\\{\\ ');
-      output = output.replace(/ \}/g,'\\} ');
+      //output = output.replace(/\{ /g,'\\left\\{\\ ');
+      //output = output.replace(/ \}/g,'\\} ');
+
       output = output.replace(/\r\n/g,'\n');
       output = output.replace(/\r/g,'\n');
       output = output.replace(/\n/g,'\\\\ \\ \\ \\ ');//改行
       output = output.replace(/\s /g,'\\ ');//スペース登録
+
 
      
     var fullWidth = 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９、。＾＋－（）｛｝'; 
     var halfWidth = 'abcdefghijklmnopqrstuvwxyz0123456789,.^+-(){}'; 
     for (var i=0,I=fullWidth.length; i<I; i++)
       output = output.replace(new RegExp(fullWidth.charAt(i),'g'),halfWidth.charAt(i));
-      
+
     function divide(original){
       var slash = [], par = 0;
       for (var i=0,I=original.length; i<I; i++){
@@ -76,6 +78,7 @@
       return parts;
     }
     output = divide(output);//分数にする
+
     output = output.replace(/ルート\((.*?)\)/g,'\\sqrt{$1} ');//修正すべき
     output = output.replace(/ルート\((.*?)\)/g,'\\sqrt{$1} ');//修正すべき
     output = output.replace(/ルート\((.*?)\)/g,'\\sqrt{$1} ');//修正すべき
@@ -94,8 +97,6 @@
     output = output.replace(/lim\((.*?)が(.*?)へ?\)/g,'\\lim_{$1 \\to $2} ');
     
     output = output.replace(/連立\((.*?),(.*?)\)/g,'\\left\\{\\begin{array}{l}$1\\\\$2 \\end{array}\\right. ');//コロンの数だけ増やしたい
-    output = output.replace(/>=/g,'\\ge ');
-    output = output.replace(/=</g,'\\le ');
     output = output.replace(/行列\(\((.*?),(.*?),(.*?)\),\((.*?),(.*?),(.*?)\),\((.*?),(.*?),(.*?)\)\)/g,'\\left(\\begin{array}{ccc}$1 & $2 & $3 \\\\$4 & $5 & $6 \\\\$7 & $8 & $9\\end{array}\\right) ');
     output = output.replace(/行列\(\((.*?),(.*?)\),\((.*?),(.*?)\)\)/g,'\\left(\\begin{array}{cc}$1 & $2 \\\\$3 & $4 \\end{array}\\right) ');
     output = output.replace(/行列\(\(?(.*?)\)?,\(?(.*?)\)?\)/g,'\\left(\\begin{array}{c}$1 \\\\$2 \\end{array}\\right) ');
@@ -103,8 +104,13 @@
     output = output.replace(/シグマ\((.*?)から(.*?)\)/g,'\\sum_{$1}^{$2} ');
     output = output.replace(/任意の?\((.*?)\)/g,'{}^{\\forall}{$1} ');
     output = output.replace(/ある\((.*?)\)/g,'{}^{\\exists}{$1} ');
+    output = output.replace(/=</g,'\\le ');
+    output = output.replace(/=&lt;/g,'\\le ');
+    output = output.replace(/=</g,'\\ge ');
+    output = output.replace(/=&gt;/g,'\\le ');
+    
 
-    var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','無限大':'\\infty '};
+    var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','無限大':'\\infty ','＞＝':'\\ge ','＝＜':'\\le '};
     for (var myJpn in jpnCommand)
       output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
     //output = output.replace(/\s/g,'\\ ');//スペース登録
@@ -115,12 +121,11 @@
 
   function PreView(){
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    output = document.getElementById('response_content').value;
-    if((output).match(exp)){
-      document.getElementById('realtime').innerHTML = output;
+    input = document.getElementById('response_content').value;
+    if((input).match(exp)){
+      document.getElementById('realtime').innerHTML = input;
     }else{
-      output = MathChenge(output);
-      document.getElementById('realtime').innerHTML = '$\\displaystyle{\\ \\ \\ '+output+'}$';
+      document.getElementById('realtime').innerHTML = '$\\displaystyle{\\ \\ \\ '+MathChenge(input)+'}$';
       MathJax.Hub.Typeset();
     }
   }
@@ -133,8 +138,7 @@
         if((tagname).match(exp)){
           $(document.getElementsByTagName('div1')[n]).html($(document.getElementsByTagName('div1')[n]).html().replace(exp,"<a href='$1' target='_blank'>$1</a>"));
         }else{
-          output = MathChenge(tagname);
-          document.getElementsByTagName('div1')[n].innerHTML = '$\\displaystyle{'+output+'}$';
+          document.getElementsByTagName('div1')[n].innerHTML = '$\\displaystyle{'+MathChenge(tagname)+'}$';
           MathJax.Hub.Typeset();
         };
       };
