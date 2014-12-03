@@ -1,5 +1,5 @@
 
-<h1>掲示板</h1>
+<h1>数学掲示板</h1>
 <hr class="style-one">
     <% @articles.each do |article| %>
       <h2>
@@ -22,9 +22,9 @@
         <%= response.name %>
         <%= response.updated_at.strftime "%Y/%M/%d %H:%M:%S" %>
       </p>
-      <span1>
+      <div1>
         <%= response.content %>
-      </span1><br>
+      </div1>
       <hr class="style-one">
     <% end %>
     <div id='realtime'>プレビュ〜です</div>
@@ -48,7 +48,7 @@
   </span3>
   </div>
   <div class="field">
-    <%= f.text_area :content ,:size=>"60x10",:oninput=>'Real()',placeholder: "内容..."%>
+    <%= f.text_area :content ,:size=>"60x10",:oninput=>'PreView()',placeholder: "内容..."%>
   </div>
   <div class="field" >
     <%= f.hidden_field :article_id, :value => article.id %>
