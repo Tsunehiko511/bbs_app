@@ -178,86 +178,8 @@
   });
   </script>
 
-<style type="text/css">
-  .hide { display: none;}
-  .show { display: block;}
-  </style>
-  <script src="https://apis.google.com/js/plusone.js" type="text/javascript"></script>
-  <script type="text/javascript">
-  /*
-   * ログインが承認またはキャンセルされるか、承認ダイアログが閉じられると
-   * トリガーされます。
-   */
-  function loginFinishedCallback(authResult) {
-    if (authResult) {
-      if (authResult['error'] == undefined){
-        gapi.auth.setToken(authResult); // 返されたトークンを保存します。
-        toggleElement('signin-button'); // ログインが成功したらログインを非表示にします。
-        getEmail();                     // メール アドレスを取得するリクエストをトリガーします。
-      } else {
-        console.log('An error occurred');
-      }
-    } else {
-      console.log('Empty authResult');  // 何かしらのエラーが発生しました
-    }
-  }
-
-  /*
-   * userinfo エンドポイントに対するリクエストを開始し、ユーザーの
-   * メール アドレスを取得します。この関数は、有効な OAuth アクセス トークンを含む 
-   * gapi.auth.setToken に依存します。
-   *
-   * リクエストが完了すると、getEmailCallback がトリガーされ、
-   * リクエストの結果を渡されます。
-   */
-  function getEmail(){
-    // oauth2 ライブラリを読み込んで、userinfo メソッドを有効にします。
-    gapi.client.load('oauth2', 'v2', function() {
-          var request = gapi.client.oauth2.userinfo.get();
-          request.execute(getEmailCallback);
-        });
-  }
-
-  function getEmailCallback(obj){
-    var el = document.getElementById('email');
-    var email = '';
-
-    if (obj['email']) {
-      email = 'Email: ' + obj['email'];
-    }
-
-    //console.log(obj);   // 完全なオブジェクトを調べるにはコメントを解除します。
-
-    el.innerHTML = email;
-    toggleElement('email');
-  }
-
-  function toggleElement(id) {
-    var el = document.getElementById(id);
-    if (el.getAttribute('class') == 'hide') {
-      el.setAttribute('class', 'show');
-    } else {
-      el.setAttribute('class', 'hide');
-    }
-  }
-  </script>
-
-
 </head>
 <body>
-
-  <div id="signin-button" class="show">
-     <div class="g-signin" data-callback="loginFinishedCallback"
-      data-approvalprompt="force"
-      data-clientid="577609686485-krn6fup640qa1haermgv4g4stnlvfmpf.apps.googleusercontent.com"
-      data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"
-      data-height="short"
-      data-cookiepolicy="single_host_origin"
-      >
-    </div>
-  </div>
-
-  <div id="email" class="hide"></div>
 
 <%= yield %>
 
