@@ -7,7 +7,7 @@
       </h2>
       <p>
         <%= article.name %>
-        <%= article.updated_at.strftime "%Y/%M/%d %H:%M:%S" %>
+        <%= article.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
       </p>
       <span1>
         <%= article.content %>
@@ -16,7 +16,7 @@
 <% article.responses.each do |response| %>
       <p>
         <%= response.name %>
-        <%= response.updated_at.strftime "%Y/%M/%d %H:%M:%S" %>
+        <%= response.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
       </p>
       <div1>
         <%= response.content %>
