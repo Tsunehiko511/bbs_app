@@ -12,15 +12,14 @@
   document.addEventListener('DOMContentLoaded',function(){ document.getElementById('response_content').focus();},false);
 
   function MathChange(output){
-      //output = output.replace(/\$/g,'');  //ドルマーク削除
-      //output = output.replace(/\{ /g,'\\left\\{\\ ');
-      //output = output.replace(/ \}/g,'\\} ');
-
+      output = output.replace(/\{/g,'\\left\\{\\right.');
+      output = output.replace(/\}/g,'\\left.\\right\\}');
+      output = output.replace(/\^\\left\\{\\right.(.*?)\\left.\\right\\}/g,'^{$1}');
+      output = output.replace(/\_\\left\\{\\right.(.*?)\\left.\\right\\}/g,'_{$1}');
       output = output.replace(/\r\n/g,'\n');
       output = output.replace(/\r/g,'\n');
       output = output.replace(/\n/g,'\\\\ \\ \\ \\ ');//改行
       output = output.replace(/\s /g,'\\ ');//スペース登録
-
 
      
     var fullWidth = 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９、。＾＋－（）｛｝'; 
@@ -81,8 +80,8 @@
     output = divide(output);//分数にする
 
    
-    output = output.replace(/積分\(\)/g,'\\int ');
-    output = output.replace(/積分\((.*?)(から|,)(.*?)\)/g,'\\int_{$1}^{$3} ');
+    output = output.replace(/積分\(\)/g,'\\int\\ \\!\\ \\!\\ \\! ');
+    output = output.replace(/積分\((.*?)(から|,)(.*?)\)/g,'\\int_{$1}^{$3}\ \\!\\ \\!\\ \\! ');
 
     output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
     output = output.replace(/\((.*?)\)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
@@ -93,21 +92,33 @@
     output = output.replace(/(.)乗根\((.*?)\)/g,'\\sqrt[$1]{$2} ');
 
     output = output.replace(/lim\((.*?)(が|,)(.*?)へ?\)/g,'\\lim_{$1 \\to $3} ');    
-    output = output.replace(/ベクトル\((.*?)\)/g,'\\overrightarrow{$1} ');
     output = output.replace(/(シグマ|しぐま|sum)\((.*?)(から|,)(.*?)\)/g,'\\sum_{$2}^{$4} ');
 
     output = output.replace(/(任意の?|すてべの?)\((.*?)\)/g,'{}^{\\forall}{$2} ');
     output = output.replace(/ある\((.*?)\)/g,'{}^{\\exists}{$1} ');
-
+  
     output = output.replace(/<=>|&lt;=&gt;/g,'\\Longleftrightarrow ');
     output = output.replace(/<=|&lt;=/g,'\\Longleftarrow ');
     output = output.replace(/=>|=&gt;/g,'\\Longrightarrow ');
     output = output.replace(/=<|=&lt;/g,'\\le ');
     output = output.replace(/>=|&gt;=/g,'\\ge ');
+    output = output.replace(/(ヘルプ|help)\(積分\)/g,'積分（１から４）\\Longrightarrow \\int_{1}^{4}, 積分（）\\Longrightarrow \\int ');
+    output = output.replace(/(ヘルプ|help)\(順列\)/g,' \\_\\{n\\}P\\_\\{m\\}\\Longrightarrow \_\{n\}P\_\{m\}');
+    output = output.replace(/(ヘルプ|help)\(組み合わせ\)/g,' \\_\\{n\\}C\\_\\{m\\}\\Longrightarrow \_\{n\}C\_\{m\}');
+    
+
+
     
 
     var replacements = {  // 0:左側, 1:置換する語句, 2:右側, 3:行列ならtrue
       'ルート(': ['\\sqrt{\\mathstrut ',{},'} '],
+      'オーバー(': ['\\overline{ ',{},'} '],
+      'アンダー(': ['\\underline{ ',{},'} '],
+      'ベクトル(': ['\\overrightarrow{ ',{},'} '],
+      'in(': ['\\in{ ',{},'} '],      
+      'ni(': ['\\in{ ',{},'} '],      
+      'sub(': ['\\subseteq{ ',{},'} '],
+      'bus(': ['\\supseteq{ ',{},'} '],
       '行列(': ['\\left(\\begin{array}{c}',{'\\),\\(':'\\\\',',':' & '},'\\end{array}\\right) ',true],
       '連立(': ['\\left\\{\\begin{array}{l}',{',':'\\\\ '},'\\end{array}\\right. '],
     }
@@ -129,13 +140,15 @@
         output = output.slice(0,start)+temp[0]+inside+temp[2]+output.slice(end+1);
       }
     }
+    output = output.replace(/(ヘルプ|help)\(集合\)/g,'in(X)\\Longrightarrow \\in X,ni(x)\\Longrightarrow \\ni,sub(X)\\Longrightarrow \\subseteq X,bus(X)\\Longrightarrow \\supseteq X');
+    output = output.replace(/\(/g,'\\left(\\right. ');
+    output = output.replace(/\)/g,'\\left.\\right) ');
 
-    var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ':'\\pi ','円周率':'\\pi ','無限大':'\\infty ','＞＝':'\\ge ','＝＜':'\\le '};
+    var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ|ぱい':'\\pi ','無限大':'\\infty ','・・・':'\\cdots ','プラマイ':'\\pm ','マイプラ':'\\mp ','not':'\\not ','➗|÷':'\\div ','×':'\\times ','≡':'\\equiv '};
     for (var myJpn in jpnCommand)
       output = output.replace(new RegExp(myJpn,'g'),jpnCommand[myJpn]);
-    //output = output.replace(/\s/g,'\\ ');//スペース登録
-    //output = output.replace(/([^ -~｡-ﾟ])/g,'$$$1$$\{\} ');//日本語フォント
-    //output = output.replace(/\(^ -~｡-ﾟ\)/g,'\$$1\$\{\}');   
+
+   
     return output;
   }
 
