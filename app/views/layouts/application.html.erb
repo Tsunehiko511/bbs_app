@@ -9,7 +9,8 @@
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
   <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
   <script>
-  document.addEventListener('DOMContentLoaded',function(){ document.getElementById('response_content').focus();},false);
+  document.addEventListener('DOMContentLoaded',function(){ document.getElementById('focusposition').focus();},false);
+
 
   function MathChange(output){
       output = output.replace(/\{/g,'\\left\\{\\right.');
@@ -72,7 +73,9 @@
             }
           }
         }
+
         parts = parts.join('');
+
       }
       else var parts = original;
       return parts;
@@ -141,8 +144,9 @@
       }
     }
     output = output.replace(/(ヘルプ|help)\(集合\)/g,'in(X)\\Longrightarrow \\in X,ni(x)\\Longrightarrow \\ni,sub(X)\\Longrightarrow \\subseteq X,bus(X)\\Longrightarrow \\supseteq X');
-    //output = output.replace(/\(/g,'\\left(\\right. ');
-    //output = output.replace(/\)/g,'\\left.\\right) ');
+
+//    output = output.replace(/\(/g,'\\left(\\right. ');
+//    output = output.replace(/\)/g,'\\left.\\right) ');
 
     var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ|ぱい':'\\pi ','無限大':'\\infty ','・・・':'\\cdots ','プラマイ':'\\pm ','マイプラ':'\\mp ','not':'\\not ','➗|÷':'\\div ','×':'\\times ','≡':'\\equiv '};
     for (var myJpn in jpnCommand)
@@ -176,6 +180,7 @@
         };
       };
   });
+    
   </script>
 
 </head>

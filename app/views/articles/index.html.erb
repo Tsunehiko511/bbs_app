@@ -21,9 +21,12 @@
       <div1>
         <%= response.content %>
       </div1>
-      <hr class="style-one">
+  
     <% end %>
-    <div id='realtime'>プレビュ〜です</div>
+    
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+
 <%= form_for(@response) do |f| %>
   <% if @response.errors.any? %>
     <div id="error_explanation">
@@ -36,21 +39,24 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.text_field :name ,placeholder: "名前"%>
-    <span3 class="actions">
-    <%= f.submit :value =>"送信" %>
-  </span3>
-  </div>
+<div class="sets">
+  <div id='realtime' ></div><br>  
   <div class="field">
     <%= f.text_area :content ,:size=>"60x4",:oninput=>'PreView()',placeholder: "内容..."%>
   </div>
   <div class="field" >
     <%= f.hidden_field :article_id, :value => article.id %>
   </div>
+  <div class="field">
+    <%= f.text_field :name ,placeholder: "名前"%>
+    <span3 class="actions">
+    <%= f.submit :value =>"送信" %>
+  </span3>
+</div>
+</div>
 <% end %>
 <% end %>
+<div id='focusposition'></div>
 <%= link_to '新規作成', new_article_path %>
 
 
