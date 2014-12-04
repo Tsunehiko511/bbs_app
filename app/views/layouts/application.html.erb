@@ -141,8 +141,8 @@
       }
     }
     output = output.replace(/(ヘルプ|help)\(集合\)/g,'in(X)\\Longrightarrow \\in X,ni(x)\\Longrightarrow \\ni,sub(X)\\Longrightarrow \\subseteq X,bus(X)\\Longrightarrow \\supseteq X');
-    output = output.replace(/\(/g,'\\left(\\right. ');
-    output = output.replace(/\)/g,'\\left.\\right) ');
+    //output = output.replace(/\(/g,'\\left(\\right. ');
+    //output = output.replace(/\)/g,'\\left.\\right) ');
 
     var jpnCommand = { 'アルファ':'\\alpha ','α':'\\alpha ','ベータ':'\\beta ','β':'\\beta ','ガンマ':'\\gamma ','γ':'\\gamma ','プラスマイナス':'\\pm ','パイ|ぱい':'\\pi ','無限大':'\\infty ','・・・':'\\cdots ','プラマイ':'\\pm ','マイプラ':'\\mp ','not':'\\not ','➗|÷':'\\div ','×':'\\times ','≡':'\\equiv '};
     for (var myJpn in jpnCommand)

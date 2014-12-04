@@ -12,9 +12,6 @@
       <span1>
         <%= article.content %>
       </span1>
-      <p>
-        <%= link_to '削除', article, method: :delete, data: { confirm: 'Are you sure?' } %>
-      </p><br>
 <hr class="style-one">
 <% article.responses.each do |response| %>
       <p>
