@@ -47,14 +47,14 @@ a {
 
 div {
   &.field, &.actions {
-    margin-bottom: 10px;
+    margin: 5px;
   }
 }
 
 .sets {
-position:fixed;left:10px; bottom:40px;   
-font-size: 22px;
-background-color: #fff;
+  position:fixed;left:10px; bottom:40px;   
+  font-size: 22px;
+  background-color: #fff;
 }
 #realtime{
   position:fixed;left:540px; bottom:110px;   
@@ -66,7 +66,9 @@ background-color: #fff;
 font-size: 22px;
 } 
 
-input,textarea{ font-size: inherit; font-family: inherit;}
+input,textarea{ 
+  font-size: inherit; font-family: inherit;
+}
 
 #notice {
   color: green;

@@ -1,63 +1,54 @@
 <h1>$\mathcal{ \color{red}{Math.B.B.S.}}$</h1>
 <h1>$\tiny{ Mathematical\ Bulletin\ Board\ System}$</h1>
-    <% @articles.each do |article| %>
-      <h2>
-        <%= article.title %>
-      </h2>
-      <p>
-        <%= article.name %>
-        <%= article.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
-      </p>
-      <span1>
-        <%= article.content %>
-      </span1>
-<% article.responses.each do |response| %>
+<% @articles.each do |article| %>
+  <h2><%= article.title %></h2>
+  <p>
+   <%= article.name %>
+   <%= article.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
+  </p>
+  <span1><%= article.content %></span1>
+  <% article.responses.each do |response| %>
       <p>
         <%= response.name %>
         <%= response.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
       </p>
-      <div1>
-        <%= response.content %>
-      </div1>
-  
+      <div1><%= response.content %></div1>  
+  <% end %>
+
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+  <%= form_for(@response) do |f| %>
+    <% if @response.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@response.errors.count, "error") %> prohibited this response from being saved:</h2>
+
+        <ul>
+        <% @response.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
     <% end %>
-
-    <br><br><br><br><br>
-    <br><br><br><br><br>
-    <br><br><br><br><br>
-    <br><br><br><br><br>
-    <br><br><br>
-<%= form_for(@response) do |f| %>
-  <% if @response.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@response.errors.count, "error") %> prohibited this response from being saved:</h2>
-
-      <ul>
-      <% @response.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <span id='realtime' ></span>
+    <div class="sets">
+      <div class="field">
+        <%= f.text_field :name ,placeholder: "名前"%>
+        <span3 class="actions">
+          <%= f.submit :value =>"送信" %>
+          <div >
+            <%= f.text_area :content ,:size=>"40x4",:oninput=>'PreView1()',placeholder: "内容..."%>  
+          </div>
+          <div >
+            <%= f.hidden_field :article_id, :value => article.id %>
+          </div>
+        </span3>
+      </div>
     </div>
   <% end %>
-  <span id='realtime' ></span>
-<div class="sets">
-    <div class="field">
-    <%= f.text_field :name ,placeholder: "名前"%>
-    <span3 class="actions">
-    <%= f.submit :value =>"送信" %>
-  <div class="field">
-    <%= f.text_area :content ,:size=>"40x4",:oninput=>'PreView1()',placeholder: "内容..."%>  
-  </div>
-  <div class="field" >
-    <%= f.hidden_field :article_id, :value => article.id %>
-  </div>
-
-  </span3>
-</div>
-</div>
 <% end %>
-<% end %>
-<div id='focusposition'></div>
+<div id='focusposition'>　</div>
 <%= link_to '新規作成', new_article_path %>
 
 
