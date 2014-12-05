@@ -5,7 +5,8 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-  <meta name="description" content="JavaScriptを使った自作ゲーム・ツールを公開しています。プログラミングが学べるゲームです。JavaScriptを基本として、日本語でコードを書けるようになっています。「矢印」を動かして、赤い宝石までたどり着いてください。道から外れて森に足を踏み入れるとゲームオーバーです。">
+  <meta name="description" content="綺麗な数式を簡単に表示できる掲示板です。MathJaxやjavascriptを応用し、紙に書くのと変わらない書き心地を目指しています。">
+  <link rel="shortcut icon" href="favicon.ico">
   <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
   <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
@@ -120,7 +121,7 @@
       'アンダー(': ['\\underline{ ',{},'} '],
       'ベクトル(': ['\\overrightarrow{ ',{},'} '],
       'in(': ['\\in{ ',{},'} '],      
-      'ni(': ['\\in{ ',{},'} '],      
+      'ni(': ['\\ni{ ',{},'} '],      
       'sub(': ['\\subseteq{ ',{},'} '],
       'bus(': ['\\supseteq{ ',{},'} '],
       '行列(': ['\\left(\\begin{array}{c}',{'\\),\\(':'\\\\',',':' & '},'\\end{array}\\right) ',true],
