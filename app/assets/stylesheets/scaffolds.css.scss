@@ -4,7 +4,7 @@ body {
   color: #333;
   font-family: "Helvetica","Arial","Hiragino Kaku Gothic ProN",sans-serif;
   line-height: 140%;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 
@@ -12,6 +12,11 @@ h1 {
 text-align: center;
 }
 
+h2{
+  margin: 10px;
+  padding: 8px;
+
+}
 hr.style-one {
     border: 0;
     height: 1px;
@@ -24,8 +29,10 @@ hr.style-one {
 
 p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   line-height: 18px;
+  margin: 10px;
+  padding: 8px;
 }
 
 pre {
@@ -44,20 +51,24 @@ a {
     background-color: #000;
   }
 }
+div1 {
+  margin: 20px;
+  padding: 20px;
+}
 
 div {
   &.field, &.actions {
-    margin: 0px;
+    margin: 10px;
   }
 }
 
 .sets {
   position:fixed;left:10px; bottom:40px;   
-  font-size: 22px;
+  font-size: 20px;
   background-color: #fff;
 }
 #realtime{
-  position:fixed;left:540px; bottom:110px;   
+  position:fixed;left:560px; bottom:110px;   
   font-size: 22px;
   background-color: #fff;
 }

@@ -5,8 +5,8 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <meta name="keywords" content="数学,掲示板,数式,MathJax,javascript">
   <meta name="description" content="綺麗な数式を簡単に表示できる掲示板です。MathJaxやjavascriptを応用し、紙に書くのと変わらない書き心地を目指しています。">
-  <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
   <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
   <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
@@ -21,7 +21,7 @@
       output = output.replace(/\_\\left\\{\\right.(.*?)\\left.\\right\\}/g,'_{$1}');
       output = output.replace(/\r\n/g,'\n');
       output = output.replace(/\r/g,'\n');
-      output = output.replace(/\n/g,'\\\\ \\ \\ \\ ');//改行
+      output = output.replace(/\n/g,'\\\\ ');//改行
       output = output.replace(/\s /g,'\\ ');//スペース登録
 
      
@@ -112,9 +112,6 @@
     output = output.replace(/(ヘルプ|help)\(組み合わせ\)/g,' \\_\\{n\\}C\\_\\{m\\}\\Longrightarrow \_\{n\}C\_\{m\}');
     
 
-
-    
-
     var replacements = {  // 0:左側, 1:置換する語句, 2:右側, 3:行列ならtrue
       'ルート(': ['\\sqrt{\\mathstrut ',{},'} '],
       'オーバー(': ['\\overline{ ',{},'} '],
@@ -146,6 +143,8 @@
       }
     }
     output = output.replace(/(ヘルプ|help)\(集合\)/g,'in(X)\\Longrightarrow \\in X,ni(x)\\Longrightarrow \\ni,sub(X)\\Longrightarrow \\subseteq X,bus(X)\\Longrightarrow \\supseteq X');
+    output = output.replace(/(ヘルプ|help)\(ルート\)/g,'ルート (x) \\Longrightarrow \\sqrt{x}\\\\ \\ \\ \\ n 乗根 (x) \\Longrightarrow \\sqrt[n]{x}\\\\ \\ \\ \\ (n+m) 乗根 (x) \\Longrightarrow \\sqrt[n+m]{x} ');
+
 
 //    output = output.replace(/\(/g,'\\left(\\right. ');
 //    output = output.replace(/\)/g,'\\left.\\right) ');
@@ -164,7 +163,7 @@
     if((input).match(exp)){
       document.getElementById('realtime').innerHTML = input;
     }else{
-      document.getElementById('realtime').innerHTML = '$\\displaystyle{\\ \\ \\ '+MathChange(input)+'}$';
+      document.getElementById('realtime').innerHTML = '$\\displaystyle{'+MathChange(input)+'}$';
       MathJax.Hub.Typeset();
     }
   }
@@ -174,7 +173,7 @@
     if((input).match(exp)){
       document.getElementById('realtime').innerHTML = input;
     }else{
-      document.getElementById('realtime').innerHTML = '$\\displaystyle{\\ \\ \\ '+MathChange(input)+'}$';
+      document.getElementById('realtime').innerHTML = '$\\displaystyle{'+MathChange(input)+'}$';
       MathJax.Hub.Typeset();
     }
   }
