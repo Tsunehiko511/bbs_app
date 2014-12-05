@@ -3,7 +3,7 @@ class CreateArticles < ActiveRecord::Migration
   def change
     create_table :articles do |t|
       t.string :title
-      t.string :name, default:'名無しメデス'
+      t.string :name
       t.text :content
 
       t.timestamps

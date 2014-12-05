@@ -10,18 +10,16 @@
       </ul>
     </div>
   <% end %>
-
+<div id='focusposition'></div>
+<div id='realtime' ></div><br>
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
+    <%= f.text_field :title ,placeholder: "タイトル..."%>
   </div>
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.text_field :name ,placeholder: "名前..."%>
   </div>
   <div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content ,:size=>"60x10"%>
+    <%= f.text_area :content ,:size=>"60x10",:oninput=>'PreView2()',placeholder: "内容..."%>
   </div>
   <div class="actions">
     <%= f.submit %>

@@ -156,7 +156,7 @@
     return output;
   }
 
-  function PreView(){
+  function PreView1(){
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     input = document.getElementById('response_content').value;
     if((input).match(exp)){
@@ -166,6 +166,17 @@
       MathJax.Hub.Typeset();
     }
   }
+    function PreView2(){
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    input = document.getElementById('article_content').value;
+    if((input).match(exp)){
+      document.getElementById('realtime').innerHTML = input;
+    }else{
+      document.getElementById('realtime').innerHTML = '$\\displaystyle{\\ \\ \\ '+MathChange(input)+'}$';
+      MathJax.Hub.Typeset();
+    }
+  }
+
 
   $(document).ready(function() {
       var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;

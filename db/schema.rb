@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20141127095126) do
 
   create_table "articles", force: true do |t|
     t.string   "title"
-    t.string   "name",       default: "名無しメデス"
+    t.string   "name"
     t.text     "content"
     t.datetime "created_at"
     t.datetime "updated_at"
