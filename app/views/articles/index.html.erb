@@ -1,19 +1,19 @@
 <h1>$\mathcal{ \color{red}{Math.B.B.S.}}$</h1>
 <h1>$\tiny{ Mathematical\ Bulletin\ Board\ System}$</h1>
 <% @articles.each do |article| %>
-  <h2>$<%= article.title %>$</h2>
+  <h2><%= article.title %></h2>
   <strong>
-    <p>$ 
-      <%= article.name %>\
+    <p>
+      <%= article.name %>
       <%= article.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
-    $</p>
+    </p>
     <div1><%= article.content %></div1>
   </strong>
   <% article.responses.each do |response| %>
-      <p>$
-        <%= response.name %>\ 
+      <p>
+        <%= response.name %>
         <%= response.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
-      $</p>
+      </p>
       <div1><%= response.content %></div1>  
   <% end %>
 
