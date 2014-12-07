@@ -1,18 +1,19 @@
 <h1>$\mathcal{ \color{red}{Math.B.B.S.}}$</h1>
 <h1>$\tiny{ Mathematical\ Bulletin\ Board\ System}$</h1>
+
 <% @articles.each do |article| %>
   <h2><%= article.title %></h2>
   <strong>
     <p>
       <%= article.name %>
-      <%= article.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
+      <%= article.updated_at.strftime "%Y年%m月%d日 %H時%M分" %>
     </p>
     <div1><%= article.content %></div1>
   </strong>
   <% article.responses.each do |response| %>
       <p>
-        <%= response.name %>
-        <%= response.updated_at.strftime "%Y年%m月%d日 %H:%M:%S" %>
+        <%= response.name %> : 
+        <%= response.updated_at.strftime "%Y年%m月%d日 %H時%M分" %>
       </p>
       <div1><%= response.content %></div1>  
   <% end %>
@@ -40,7 +41,7 @@
         <span3 class="actions">
           <%= f.submit :value =>"送信" %>
           <div >
-            <%= f.text_area :content ,:size=>"40x4",:oninput=>'PreView1()',placeholder: "内容..."%>  
+            <%= f.text_area :content ,:size=>"30x4",:oninput=>'PreView1()',placeholder: "内容..."%>  
           </div>
           <div >
             <%= f.hidden_field :article_id, :value => article.id %>
